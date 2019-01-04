@@ -1,0 +1,20 @@
+<div class="content-container">
+   <main class="content-area">
+      <div *ngIf="loginStarted">
+         <div class="progress loop"><progress></progress></div>
+      </div>
+      <div *ngIf="!loginStarted">
+         <form clrForm clrLayout="vertical" (ngSubmit)="onSubmit(); loginStarted = true">
+            <clr-input-container>
+               <label>Login</label>
+               <input clrInput type="text" name="login" [(ngModel)]="login" required />
+            </clr-input-container>
+            <clr-password-container>
+               <label>Password</label>
+               <input clrPassword name="password" [(ngModel)]="password" />
+            </clr-password-container>
+            <button class="btn btn-primary">Login</button>
+         </form>
+      </div>
+   </main>
+</div>

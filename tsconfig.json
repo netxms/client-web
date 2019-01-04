@@ -18,10 +18,11 @@
       "es2018",
       "dom"
     ],
-    "paths": [
+    "paths": {
        "@app/*": ["src/app/*"],
        "@components/*": ["src/app/components/*"],
+       "@modules/*": ["src/app/modules/*"],
        "@services/*": ["src/app/services/*"]
-    ]
+    }
   }
 }
