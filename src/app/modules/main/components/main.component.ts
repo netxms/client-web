@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppAlertService, AppAlertSeverity } from '@services/app-alert.service';
 import { SessionService } from '@services/session.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class MainComponent implements OnInit {
    public passwordMatchError = false;
 
    constructor(
+      public appAlertService: AppAlertService,
       private sessionService: SessionService,
       private router: Router) { }
 
@@ -47,6 +49,7 @@ export class MainComponent implements OnInit {
       if (this.newPassword1 === this.newPassword2) {
          this.passwordMatchError = false;
          this.showPasswordChangeDialog = false;
+         this.appAlertService.addAlert(AppAlertSeverity.SUCCESS, 'PasswordChange', 'Password successfully changed');
       } else {
          this.passwordMatchError = true;
       }
