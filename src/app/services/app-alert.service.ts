@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AlertPromise } from 'selenium-webdriver';
 
 /**
  * Possible severity values for applicaion alerts
