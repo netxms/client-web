@@ -1,0 +1,6 @@
+<clr-tree [clrLazy]="true">
+   <clr-tree-node *clrRecursiveFor="let object of getRootObjects() | async; getChildren: getChildren" [clrLoading]="loading">
+      <clr-icon [attr.shape]="object.icon"></clr-icon>
+      {{object.name}}
+   </clr-tree-node>
+</clr-tree>

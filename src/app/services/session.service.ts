@@ -64,7 +64,7 @@ export class SessionService {
     * @param password password
     */
    login(username: string, password: string): Observable<SessionHandle> {
-      this.http.post<SessionHandle>('/api/sessions', JSON.stringify(
+      this.http.post<SessionHandle>(this.getApiBaseUrl() + '/sessions', JSON.stringify(
          { 'login': username, 'password': password })).subscribe(
             (data: SessionHandle) => this.sessionHandle = data,
             error => this.error = error
@@ -99,5 +99,12 @@ export class SessionService {
     */
    getLoggedInUserInfo(): UserInfo {
       return (this.sessionHandle != null) ? this.sessionHandle.session.user : null;
+   }
+
+   /**
+    * Get base URL for API calls
+    */
+   getApiBaseUrl(): string {
+      return '/api';
    }
 }
