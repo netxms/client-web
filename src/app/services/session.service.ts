@@ -43,10 +43,6 @@ export interface SessionHandle {
    session: Session;
 }
 
-class ObjectResponse {
-   objects: NetObj[];
-}
-
 /**
  * Session service
  */
@@ -89,9 +85,7 @@ export class SessionService {
             (e: HttpErrorResponse) => {
                console.log('Login failed: ' + e.status + ' ' + e.message);
                this.error = e;
-            }))
-         .pipe(mergeMap((h: SessionHandle) => this.http.get<ObjectResponse>(this.getApiBaseUrl() + '/objects')))
-            ;
+            }));
    }
 
    /**

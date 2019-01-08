@@ -1,6 +1,6 @@
 <ng-container *ngIf="rootObjects$ | async as rootObjects; else loadingOrError">
-   <clr-tree>
-      <clr-tree-node *clrRecursiveFor="let object of rootObjects; getChildren: getChildren" [clrLoading]="loading">
+   <clr-tree [clrLazy]="true">
+      <clr-tree-node *clrRecursiveFor="let object of rootObjects; getChildren: getChildren" [clrLoading]="loading" [clrExpandable]="object.expandable">
          <clr-icon [attr.shape]="object.icon"></clr-icon>
          {{object.objectName}}
       </clr-tree-node>

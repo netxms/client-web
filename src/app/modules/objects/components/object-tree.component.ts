@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { NetObj, ObjectsService } from '@app/services/objects.service';
 import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -30,15 +30,22 @@ export class ObjectTreeComponent implements OnInit {
          .pipe(catchError(
             (e: HttpErrorResponse) => {
                this.error = e;
-               console.log('Error in getRootObjects: ' + e.message);
+               console.log('Error in ObjectTreeComponent.getRootObjects: ' + e.message);
                return throwError(e);
             }
          ));
    }
 
-   getChildren(parent: NetObj): NetObj[] {
+   getChildren = (parent: NetObj) => {
+      console.log('getChildren: ' + JSON.stringify(parent));
       this.error = null;
-      console.log('>>> get children for ' + parent.objectName);
-      return [];
+      return this.objectService.getObjectSet(parent.children, true)
+         .pipe(catchError(
+            (e: HttpErrorResponse) => {
+               this.error = e;
+               console.log('Error in ObjectTreeComponent.getChildren: ' + e.message);
+               return throwError(e);
+            }
+         ));
    }
 }
