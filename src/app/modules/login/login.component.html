@@ -1,9 +1,21 @@
 <div class="content-container">
    <main class="content-area">
       <div *ngIf="loginStarted">
-         <div class="progress loop"><progress></progress></div>
+         <div class="progress loop">
+            <progress></progress>
+         </div>
       </div>
       <div *ngIf="!loginStarted">
+         <div *ngIf="errorMessage">
+            <div class="alert alert-danger" role="alert">
+               <div class="alert-items">
+                  <div class="alert-icon-wrapper">
+                     <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                  </div>
+                  <span class="alert-text">{{errorMessage}}</span>
+               </div>
+            </div>
+         </div>
          <form clrForm clrLayout="vertical" (ngSubmit)="onSubmit(); loginStarted = true">
             <clr-input-container>
                <label>Login</label>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { tap, mergeMap } from 'rxjs/operators';
 
 /**
  * Connected NetXMS server information
@@ -42,6 +43,13 @@ export interface SessionHandle {
    session: Session;
 }
 
+class ObjectResponse {
+   objects: NetObj[];
+}
+
+/**
+ * Session service
+ */
 @Injectable({
    providedIn: 'root'
 })
@@ -64,25 +72,33 @@ export class SessionService {
     * @param password password
     */
    login(username: string, password: string): Observable<SessionHandle> {
-      this.http.post<SessionHandle>(this.getApiBaseUrl() + '/sessions', JSON.stringify(
-         { 'login': username, 'password': password })).subscribe(
-            (data: SessionHandle) => this.sessionHandle = data,
-            error => this.error = error
-         );
-      if (this.sessionHandle != null) {
-         console.log('Logged in as ' + this.sessionHandle.sessionHandle);
-         sessionStorage.setItem('sessionToken', this.sessionHandle.sessionHandle);
-         sessionStorage.setItem('sessionObject', JSON.stringify(this.sessionHandle));
-      } else {
-         console.log('Login failed: ' + this.error.status + ' ' + this.error.message);
-      }
-      return of(this.sessionHandle);
+      this.sessionHandle = null;
+      this.error = null;
+      sessionStorage.removeItem('sessionToken');
+      sessionStorage.removeItem('sessionObject');
+
+      return this.http.post<SessionHandle>(this.getApiBaseUrl() + '/sessions',
+            JSON.stringify({ 'login': username, 'password': password }))
+         .pipe(tap(
+            (h: SessionHandle) => {
+               console.log('Logged in as ' + h.sessionHandle);
+               sessionStorage.setItem('sessionToken', h.sessionHandle);
+               sessionStorage.setItem('sessionObject', JSON.stringify(h));
+               this.sessionHandle = h;
+            },
+            (e: HttpErrorResponse) => {
+               console.log('Login failed: ' + e.status + ' ' + e.message);
+               this.error = e;
+            }))
+         .pipe(mergeMap((h: SessionHandle) => this.http.get<ObjectResponse>(this.getApiBaseUrl() + '/objects')))
+            ;
    }
 
    /**
     * Logout from NetXMS server.
     */
    logout() {
+      this.sessionHandle = null;
       sessionStorage.removeItem('sessionToken');
       sessionStorage.removeItem('sessionObject');
    }
@@ -99,6 +115,13 @@ export class SessionService {
     */
    getLoggedInUserInfo(): UserInfo {
       return (this.sessionHandle != null) ? this.sessionHandle.session.user : null;
+   }
+
+   /**
+    * Get description for login error
+    */
+   getErrorDescription(): string {
+      return (this.error) ? this.error.statusText : 'Success';
    }
 
    /**

@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { SessionService } from '@app/services/session.service';
+import { map, tap } from 'rxjs/operators';
 
 export class NetObj {
    objectId: number;
@@ -11,6 +12,10 @@ export class NetObj {
    status: string;
    parents: number[];
    children: number[];
+
+   // UI only attributes
+   icon: string;
+   expandable: boolean;
 }
 
 class ObjectResponse {
@@ -24,7 +29,7 @@ class ObjectResponse {
    providedIn: 'root'
 })
 export class ObjectsService {
-   private activeObjectSet$ = new ReplaySubject<NetObj[]>(1);
+   private objects = null;
 
    constructor(
       private http: HttpClient,
@@ -32,19 +37,29 @@ export class ObjectsService {
    ) { }
 
    getRootObjects(classFilter: string): Observable<NetObj[]> {
-      console.log('>>> get root objects');
-      this.http.get<ObjectResponse>(this.sessionService.getApiBaseUrl() + '/api/objects?topLevelOnly=true&class=' + classFilter)
-         .subscribe(
-            (data: ObjectResponse) => {
-               console.log('getObjects done');
-               this.activeObjectSet$.next(data.objects);
-               this.activeObjectSet$.complete();
-            },
-            error => {
-               console.log('getObjects error');
-               this.activeObjectSet$.error(error);
-            }
-         );
-      return this.activeObjectSet$.asObservable();
+      console.log('Called ObjectService.getRootObjects("' + classFilter + '")');
+      return this.http
+            .get<ObjectResponse>(this.sessionService.getApiBaseUrl() + '/objects?topLevelOnly=true&class=' + classFilter)
+            .pipe(tap(result => { console.log('object response: ' + JSON.stringify(result)) }))
+            .pipe(map(result => result.objects))
+            .pipe(tap((objects: NetObj[]) => {
+               objects.forEach(object => { object.icon = 'cog'; object.expandable = (object.children.length > 0); });
+            }));
+   }
+
+   getAllObjects(): Observable<NetObj[]> {
+      return this.http
+            .get<ObjectResponse>(this.sessionService.getApiBaseUrl() + '/objects')
+            .pipe(map(result => result.objects))
+            .pipe(tap((objects: NetObj[]) => {
+               objects.forEach(object => { object.icon = 'cog'; object.expandable = (object.children.length > 0); });
+            }));
+   }
+
+   getObject(id: number): Observable<NetObj> {
+      if (this.objects) {
+         return of(this.objects[id]);
+      }
+      return
    }
 }

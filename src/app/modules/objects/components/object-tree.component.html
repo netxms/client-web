@@ -1,6 +1,24 @@
-<clr-tree [clrLazy]="true">
-   <clr-tree-node *clrRecursiveFor="let object of getRootObjects() | async; getChildren: getChildren" [clrLoading]="loading">
-      <clr-icon [attr.shape]="object.icon"></clr-icon>
-      {{object.name}}
-   </clr-tree-node>
-</clr-tree>
+<ng-container *ngIf="rootObjects$ | async as rootObjects; else loadingOrError">
+   <clr-tree>
+      <clr-tree-node *clrRecursiveFor="let object of rootObjects; getChildren: getChildren" [clrLoading]="loading">
+         <clr-icon [attr.shape]="object.icon"></clr-icon>
+         {{object.objectName}}
+      </clr-tree-node>
+   </clr-tree>
+</ng-container>
+<ng-template #loadingOrError>
+   <ng-container *ngIf="error; else loading">
+      <div class="alert alert-danger" role="alert">
+         <div class="alert-items">
+            <div class="alert-icon-wrapper">
+               <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+            </div>
+            <span class="alert-text">{{error.message}}</span>
+         </div>
+      </div>
+   </ng-container>
+   <ng-template #loading>
+      <span class="spinner spinner-inline">Loading...</span>
+      <span>Loading...</span>
+   </ng-template>
+</ng-template>

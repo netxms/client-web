@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SessionService } from '@services/session.service';
+import { SessionService, SessionHandle } from '@services/session.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
    selector: 'app-login',
@@ -12,6 +13,7 @@ export class LoginComponent implements OnInit {
    password = '';
    loginStarted = false;
    returnUrl: string;
+   errorMessage: string;
 
    constructor(
       private sessionService: SessionService,
@@ -24,7 +26,17 @@ export class LoginComponent implements OnInit {
    }
 
    onSubmit() {
-      this.sessionService.login(this.login, this.password);
-      this.router.navigate([this.returnUrl]);
+      var subscription = this.sessionService.login(this.login, this.password)
+         .subscribe(
+            (s: SessionHandle) => {
+               this.errorMessage = null;
+               this.router.navigate([this.returnUrl]);
+               subscription.unsubscribe();
+            },
+            (e: HttpErrorResponse) => {
+               this.loginStarted = false;
+               this.errorMessage = this.sessionService.getErrorDescription();
+            }
+      );
    }
 }
