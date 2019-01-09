@@ -1,24 +1,22 @@
 <ng-container *ngIf="rootObjects$ | async as rootObjects; else loadingOrError">
    <clr-tree [clrLazy]="true">
-      <clr-tree-node *clrRecursiveFor="let object of rootObjects; getChildren: getChildren" [clrLoading]="loading" [clrExpandable]="object.expandable">
-         <clr-icon [attr.shape]="object.icon"></clr-icon>
-         {{object.objectName}}
+      <clr-tree-node *clrRecursiveFor="let object of rootObjects; getChildren: getChildren" [clrLoading]="loading"
+         [clrExpandable]="object.expandable">
+         <a [routerLink]="['./', object.objectId]" class="clr-treenode-link">
+            <clr-icon [attr.shape]="object.icon"></clr-icon>
+            {{object.objectName}}
+         </a>
       </clr-tree-node>
    </clr-tree>
 </ng-container>
 <ng-template #loadingOrError>
    <ng-container *ngIf="error; else loading">
-      <div class="alert alert-danger" role="alert">
-         <div class="alert-items">
-            <div class="alert-icon-wrapper">
-               <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
-            </div>
-            <span class="alert-text">{{error.message}}</span>
-         </div>
-      </div>
+      <nx-api-error-message [error-object]="error"></nx-api-error-message>
    </ng-container>
    <ng-template #loading>
-      <span class="spinner spinner-inline">Loading...</span>
-      <span>Loading...</span>
+      <div style="margin: 5px">
+         <span class="spinner spinner-inline"></span>
+         <span style="margin-left: 4px">Loading...</span>
+      </div>
    </ng-template>
 </ng-template>

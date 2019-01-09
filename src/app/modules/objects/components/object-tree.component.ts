@@ -14,7 +14,7 @@ export class ObjectTreeComponent implements OnInit {
 
    rootObjects$: Observable<NetObj[]>;
    rootObjects: NetObj[];
-   error: any = null;
+   error: HttpErrorResponse = null;
 
    constructor(private objectService: ObjectsService) { }
 
@@ -30,7 +30,7 @@ export class ObjectTreeComponent implements OnInit {
          .pipe(catchError(
             (e: HttpErrorResponse) => {
                this.error = e;
-               console.log('Error in ObjectTreeComponent.getRootObjects: ' + e.message);
+               console.log('Error in ObjectTreeComponent.getRootObjects: ' + this.error.message);
                return throwError(e);
             }
          ));

@@ -1,21 +1,27 @@
-<div class="content-container">
-   <div class="content-area">
-      <p>content here</p>
-   </div>
-   <nav class="sidenav">
+<div class="nx-main-view">
+   <as-split direction="horizontal">
+      <as-split-area size="20">
          <clr-tabs>
-               <clr-tab>
-                   <a clrTabLink id="link1"><clr-icon shape="organization" size="24"></clr-icon></a>
-                   <clr-tab-content *clrIfActive>
-                      <nx-object-tree root-classes="ServiceRoot,Container,Node"></nx-object-tree>
-                   </clr-tab-content>
-               </clr-tab>
-               <clr-tab>
-                     <a clrTabLink id="link1"><clr-icon shape="network-globe" size="24"></clr-icon></a>
-                     <clr-tab-content *clrIfActive>
-                           <nx-object-tree root-classes="Network,Zone,Subnet,Node"></nx-object-tree>
-                        </clr-tab-content>
-               </clr-tab>
-           </clr-tabs>
-         </nav>
+            <clr-tab>
+               <a clrTabLink id="link1">
+                  <clr-icon shape="organization" size="24"></clr-icon>
+               </a>
+               <clr-tab-content *clrIfActive>
+                  <nx-object-tree root-classes="ServiceRoot,Container,Node"></nx-object-tree>
+               </clr-tab-content>
+            </clr-tab>
+            <clr-tab>
+               <a clrTabLink id="link1">
+                  <clr-icon shape="network-globe" size="24"></clr-icon>
+               </a>
+               <clr-tab-content *clrIfActive>
+                  <nx-object-tree root-classes="Network,Zone,Subnet,Node"></nx-object-tree>
+               </clr-tab-content>
+            </clr-tab>
+         </clr-tabs>
+      </as-split-area>
+      <as-split-area size="80">
+         <router-outlet></router-outlet>
+      </as-split-area>
+   </as-split>
 </div>
