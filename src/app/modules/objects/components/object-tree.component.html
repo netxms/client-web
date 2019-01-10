@@ -2,7 +2,7 @@
    <clr-tree [clrLazy]="true">
       <clr-tree-node *clrRecursiveFor="let object of rootObjects; getChildren: getChildren" [clrLoading]="loading"
          [clrExpandable]="object.expandable">
-         <a [routerLink]="['./', object.objectId]" class="clr-treenode-link">
+         <a [routerLink]="['./', object.objectId]" [routerLinkActive]="'active'" class="clr-treenode-link">
             <clr-icon [attr.shape]="object.icon"></clr-icon>
             {{object.objectName}}
          </a>

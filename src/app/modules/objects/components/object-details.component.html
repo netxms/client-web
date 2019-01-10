@@ -1,12 +1,13 @@
-<div class="nx-main-view nx-inner-element">
+<div class="nx-main-content-area nx-horizontal-panel">
    <div *ngIf="object; else loading">
-      <div id="objectHeader" style="display: flex; align-items: center;">
+      <div id="objectHeader" class="nx-title-bar">
          <div>
             <clr-icon [attr.shape]="object.icon" size="32"></clr-icon>
          </div>
          <div>
             <h3 style="margin: 4px">{{object.objectName}}</h3>
          </div>
+         <div class="nx-title-bar-divider"></div>
          <div class="dropdown">
             <button type="button" class="dropdown-toggle btn btn-link">
                ACTIONS
@@ -36,7 +37,27 @@
             </div>
          </div>
       </div>
-
+      <div id="objectTabs">
+         <nav class="subnav nx-main-content-area">
+            <ul class="nav">
+               <li class="nav-item">
+                  <a class="nav-link" [routerLink]="['./summary']" [routerLinkActive]="'active'">Summary</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link" [routerLink]="['./alarms']" [routerLinkActive]="'active'">Alarms</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link" [routerLink]="['./performance']" [routerLinkActive]="'active'">Performance</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link" [routerLink]="['./interfaces']" [routerLinkActive]="'active'">Interfaces</a>
+               </li>
+            </ul>
+         </nav>
+         <div class="nx-horizontal-panel">
+            <router-outlet></router-outlet>
+         </div>
+      </div>
    </div>
 </div>
 

@@ -1,4 +1,4 @@
-<div class="nx-main-view">
+<div class="nx-fill-parent nx-navigation-area">
    <as-split direction="horizontal">
       <as-split-area size="20">
          <clr-tabs>
@@ -21,7 +21,9 @@
          </clr-tabs>
       </as-split-area>
       <as-split-area size="80">
-         <router-outlet></router-outlet>
+         <div class="nx-horizontal-panel nx-main-content-area">
+            <router-outlet></router-outlet>
+         </div>
       </as-split-area>
    </as-split>
 </div>

@@ -1,0 +1,15 @@
+<clr-datagrid>
+      <clr-dg-column>Severity</clr-dg-column>
+      <clr-dg-column>State</clr-dg-column>
+      <clr-dg-column>Message</clr-dg-column>
+      <clr-dg-column>Count</clr-dg-column>
+  
+      <clr-dg-row *ngFor="let alarm of users">
+          <clr-dg-cell>{{user.id}}</clr-dg-cell>
+          <clr-dg-cell>{{user.name}}</clr-dg-cell>
+          <clr-dg-cell>{{user.creation | date}}</clr-dg-cell>
+          <clr-dg-cell>{{user.color}}</clr-dg-cell>
+      </clr-dg-row>
+  
+      <clr-dg-footer>{{users.length}} users</clr-dg-footer>
+  </clr-datagrid>
